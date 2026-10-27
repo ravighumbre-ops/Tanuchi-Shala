@@ -1,4 +1,3 @@
-
 onPressed: () async {
   if (answered) return;
 
@@ -15,7 +14,7 @@ onPressed: () async {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
-          '🎉🥳 व्वा! अगदी बरोबर! 🌟 '
+          '🎉🥳 व्वा! अगदी बरोबर! 🌟\n'
           'तू खूप हुशार आहेस! 🏆👏',
         ),
         backgroundColor: Colors.green,
@@ -23,12 +22,11 @@ onPressed: () async {
       ),
     );
 
-    if (index < questions.length - 1) {
-      setState(() {
-        index++;
-        answered = false;
-      });
-    } else {
+    if (index == questions.length - 1) {
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+
       showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -39,11 +37,11 @@ onPressed: () async {
             textAlign: TextAlign.center,
           ),
           content: Text(
-            '🌟 तू ${questions.length} पैकी '
-            '$score प्रश्नांची उत्तरे बरोबर दिलीस!\n\n'
+            '🌟 ${questions.length} पैकी $score '
+            'प्रश्नांची उत्तरे बरोबर!\n\n'
             '🥳 तू खूप छान खेळलास!\n'
             '💖 आम्हाला तुझा अभिमान आहे!\n'
-            '🚀 असाच शिकत राहा आणि चमकत राहा! ✨',
+            '🚀 असाच शिकत राहा! ✨',
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 18,
@@ -72,14 +70,20 @@ onPressed: () async {
           ],
         ),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('👇 आता पुढचा प्रश्न सोडव!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
-          '😊 काही हरकत नाही, बाळा! 💪 '
-          'पुन्हा प्रयत्न कर! 🌈\n'
-          '⭐ प्रयत्न करत राहा, तू नक्की शिकशील! 🥰',
+          '😊 काही हरकत नाही, बाळा! 💪\n'
+          'पुन्हा प्रयत्न कर! 🌈',
         ),
         backgroundColor: Colors.deepPurple,
         duration: Duration(seconds: 3),
