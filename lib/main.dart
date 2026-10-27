@@ -1,6 +1,13 @@
+
 onPressed: () async {
+  if (answered) return;
+
   if (option == item['answer']) {
-    score++;
+    setState(() {
+      score++;
+      answered = true;
+    });
+
     await widget.onStar();
 
     if (!mounted) return;
@@ -19,6 +26,7 @@ onPressed: () async {
     if (index < questions.length - 1) {
       setState(() {
         index++;
+        answered = false;
       });
     } else {
       showDialog<void>(
@@ -56,6 +64,7 @@ onPressed: () async {
                 setState(() {
                   index = 0;
                   score = 0;
+                  answered = false;
                 });
               },
               child: const Text('🔄 पुन्हा खेळ'),
@@ -65,8 +74,6 @@ onPressed: () async {
       );
     }
   } else {
-    if (!mounted) return;
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
@@ -80,4 +87,3 @@ onPressed: () async {
     );
   }
 },
-
