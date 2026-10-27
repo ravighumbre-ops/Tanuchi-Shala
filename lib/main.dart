@@ -15,7 +15,6 @@ class TanuchiShalaApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: 'Roboto',
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.pink,
         ),
@@ -76,9 +75,7 @@ class HomePage extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text(
           'तानुची शाळा',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -144,7 +141,7 @@ class HomePage extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final game = games[index];
-                final color = game['color'] as Color;
+                final color = game['color'] as MaterialColor;
 
                 return InkWell(
                   borderRadius: BorderRadius.circular(22),
@@ -326,10 +323,7 @@ class _LearningPageState extends State<LearningPage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text(
-                widget.emoji,
-                style: const TextStyle(fontSize: 65),
-              ),
+              Text(widget.emoji, style: const TextStyle(fontSize: 65)),
               Text(
                 '⭐ मिळालेले स्टार्स: $stars',
                 style: const TextStyle(
