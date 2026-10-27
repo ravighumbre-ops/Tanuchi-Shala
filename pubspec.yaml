@@ -1,8 +1,8 @@
 
 name: tanuchi_shala
-description: Marathi learning game for children aged 3 to 6
+description: Marathi learning games for children aged 3 to 6
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.5.3
+  flutter_tts: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -18,4 +20,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
