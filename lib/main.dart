@@ -1,4 +1,3 @@
-
 onPressed: () async {
   if (option == item['answer']) {
     score++;
@@ -9,7 +8,8 @@ onPressed: () async {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
-          '🎉🥳 यय्य! एकदम बरोबर! 🌟🏆 तू खूप हुशार आहेस!',
+          '🎉🥳 व्वा! अगदी बरोबर! 🌟 '
+          'तू खूप हुशार आहेस! 🏆👏',
         ),
         backgroundColor: Colors.green,
         duration: Duration(seconds: 2),
@@ -17,7 +17,9 @@ onPressed: () async {
     );
 
     if (index < questions.length - 1) {
-      setState(() => index++);
+      setState(() {
+        index++;
+      });
     } else {
       showDialog<void>(
         context: context,
@@ -29,11 +31,16 @@ onPressed: () async {
             textAlign: TextAlign.center,
           ),
           content: Text(
-            '🌟 तू ${questions.length} पैकी $score प्रश्नांची उत्तरे बरोबर दिलीस!\n\n'
+            '🌟 तू ${questions.length} पैकी '
+            '$score प्रश्नांची उत्तरे बरोबर दिलीस!\n\n'
             '🥳 तू खूप छान खेळलास!\n'
-            '🚀 असाच शिकत राहा आणि चमकत राहा!',
+            '💖 आम्हाला तुझा अभिमान आहे!\n'
+            '🚀 असाच शिकत राहा आणि चमकत राहा! ✨',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18, height: 1.5),
+            style: const TextStyle(
+              fontSize: 18,
+              height: 1.5,
+            ),
           ),
           actions: [
             TextButton(
@@ -61,14 +68,16 @@ onPressed: () async {
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          '😊 काही हरकत नाही, बाळा! 💪 पुन्हा प्रयत्न कर. '
-          'तू नक्की शिकशील! 🌈✨',
+      const SnackBar(
+        content: Text(
+          '😊 काही हरकत नाही, बाळा! 💪 '
+          'पुन्हा प्रयत्न कर! 🌈\n'
+          '⭐ प्रयत्न करत राहा, तू नक्की शिकशील! 🥰',
         ),
         backgroundColor: Colors.deepPurple,
-        duration: const Duration(seconds: 3),
+        duration: Duration(seconds: 3),
       ),
     );
   }
 },
+
