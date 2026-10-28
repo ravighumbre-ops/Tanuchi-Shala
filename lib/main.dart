@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,10 +14,10 @@ class TanuShalaApp extends StatelessWidget {
       title: 'तानूची शाळा',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF7657E8),
+          seedColor: Colors.purple,
         ),
+        useMaterial3: true,
       ),
       home: const HomePage(),
     );
@@ -26,142 +27,175 @@ class TanuShalaApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  final List<Map<String, dynamic>> sections = const [
+    {'title': 'मराठी अक्षरे', 'emoji': 'अ', 'color': Colors.pink},
+    {'title': 'अंक शिकूया', 'emoji': '🔢', 'color': Colors.blue},
+    {'title': 'रंग ओळखा', 'emoji': '🎨', 'color': Colors.orange},
+    {'title': 'प्राणी ओळखा', 'emoji': '🐘', 'color': Colors.green},
+    {'title': 'छान गोष्टी', 'emoji': '📚', 'color': Colors.deepPurple},
+    {'title': 'बागेचा गेम', 'emoji': '🌱', 'color': Colors.teal},
+    {'title': 'प्रश्नमंजुषा', 'emoji': '⭐', 'color': Colors.red},
+  ];
+
+  void openSection(BuildContext context, int index) {
+    Widget page;
+
+    if (index == 0) {
+      page = const LearnPage(
+        title: 'मराठी अक्षरे',
+        items: ['अ आ इ ई', 'उ ऊ ऋ', 'ए ऐ ओ औ', 'क ख ग घ', 'च छ ज झ',
+          'ट ठ ड ढ', 'त थ द ध', 'प फ ब भ', 'म य र ल व', 'श ष स ह'],
+      );
+    } else if (index == 1) {
+      page = const LearnPage(
+        title: 'अंक शिकूया',
+        items: ['० - शून्य', '१ - एक', '२ - दोन', '३ - तीन',
+          '४ - चार', '५ - पाच', '६ - सहा', '७ - सात',
+          '८ - आठ', '९ - नऊ', '१० - दहा'],
+      );
+    } else if (index == 2) {
+      page = const LearnPage(
+        title: 'रंग ओळखा',
+        items: ['🔴 लाल', '🔵 निळा', '🟢 हिरवा', '🟡 पिवळा',
+          '🟠 नारंगी', '🟣 जांभळा', '⚫ काळा', '⚪ पांढरा'],
+      );
+    } else if (index == 3) {
+      page = const LearnPage(
+        title: 'प्राणी ओळखा',
+        items: ['🐘 हत्ती', '🦁 सिंह', '🐯 वाघ', '🐵 माकड',
+          '🐰 ससा', '🐶 कुत्रा', '🐱 मांजर', '🐄 गाय',
+          '🐎 घोडा', '🦚 मोर'],
+      );
+    } else if (index == 4) {
+      page = const StoriesPage();
+    } else if (index == 5) {
+      page = const GardenGame();
+    } else {
+      page = const QuizPage();
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final games = [
-      ('🌱', 'बागेचा गेम', const Color(0xFF35A86B)),
-      ('🔤', 'मराठी अक्षरे', const Color(0xFFEC8C43)),
-      ('🔢', 'अंक शिकूया', const Color(0xFF4285E8)),
-      ('🧠', 'प्रश्नमंजुषा', const Color(0xFFBA65D8)),
-    ];
-
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E8),
       appBar: AppBar(
-        title: const Text(
-          '🎒 तानूची शाळा',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: const Color(0xFF7657E8),
-        foregroundColor: Colors.white,
+        title: const Text('🎒 तानूची शाळा'),
+        centerTitle: true,
+        backgroundColor: Colors.purple.shade100,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF7657E8),
-                  Color(0xFFB36CE8),
-                ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFFF1FA), Color(0xFFE8F4FF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            const Text(
+              'चला मुलांनो, खेळत खेळत शिकूया! 🎉',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
               ),
-              borderRadius: BorderRadius.circular(24),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('👧🏻 🧒🏻 🌈',
-                    style: TextStyle(fontSize: 42)),
-                SizedBox(height: 12),
-                Text(
-                  'नमस्कार छोट्या मित्रा!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                  ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: sections.length,
+                gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.08,
                 ),
-                SizedBox(height: 6),
-                Text(
-                  'चला, खेळूया आणि शिकूया!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 22),
-          const Text(
-            '🎈 आपले खेळ आणि शिकवणी',
-            style: TextStyle(
-              fontSize: 21,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: games.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.05,
-            ),
-            itemBuilder: (context, index) {
-              final item = games[index];
-
-              return Card(
-                color: Colors.white,
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    if (index == 0) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const GardenGame(),
-                        ),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LearningPage(
-                            emoji: item.$1,
-                            title: item.$2,
-                            color: item.$3,
+                itemBuilder: (context, index) {
+                  final section = sections[index];
+                  final color = section['color'] as Color;
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(22),
+                    onTap: () => openSection(context, index),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.13),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(color: color, width: 2),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            section['emoji'] as String,
+                            style: const TextStyle(fontSize: 42),
                           ),
-                        ),
-                      );
-                    }
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        item.$1,
-                        style: const TextStyle(fontSize: 48),
+                          const SizedBox(height: 10),
+                          Text(
+                            section['title'] as String,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('चला सुरू करूया!'),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        item.$2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: item.$3,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      const Text('खेळण्यासाठी टॅप करा'),
-                    ],
-                  ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LearnPage extends StatelessWidget {
+  final String title;
+  final List<String> items;
+
+  const LearnPage({
+    super.key,
+    required this.title,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                child: Text('${index + 1}'),
+              ),
+              title: Text(
+                items[index],
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -175,160 +209,105 @@ class GardenGame extends StatefulWidget {
 }
 
 class _GardenGameState extends State<GardenGame> {
-  int stage = 0;
   int water = 0;
-  int stars = 0;
+  bool planted = false;
+  bool finished = false;
 
   void plantSeed() {
     setState(() {
-      stage = 1;
+      planted = true;
+      water = 0;
+      finished = false;
     });
   }
 
   void waterPlant() {
-    if (stage == 0 || stage >= 4) return;
+    if (!planted || finished) return;
 
     setState(() {
       water++;
-      stage++;
-
-      if (stage == 4) {
-        stars++;
+      if (water >= 3) {
+        finished = true;
       }
     });
   }
 
-  void restartGame() {
+  void restart() {
     setState(() {
-      stage = 0;
       water = 0;
+      planted = false;
+      finished = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final plant = switch (stage) {
-      0 => '🟤',
-      1 => '🌱',
-      2 => '🌿',
-      3 => '🪴',
-      _ => '🌳',
-    };
-
-    final message = switch (stage) {
-      0 => 'मातीमध्ये बियाणे लावा!',
-      1 => 'छान! आता पाणी द्या.',
-      2 => 'कोंब वाढत आहे! पाणी द्या.',
-      3 => 'झाड मोठे होत आहे!',
-      _ => 'शाब्बास! तुमचे झाड वाढले! 🎉',
-    };
-
     return Scaffold(
-      backgroundColor: const Color(0xFFE9F9E9),
-      appBar: AppBar(
-        title: const Text('🌱 बागेचा गेम'),
-        backgroundColor: const Color(0xFF238B50),
-        foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: const Text('🌱 बागेचा गेम')),
       body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'आपली छोटी बाग',
+                'बी पेरा आणि झाड वाढवा!',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 27,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 25),
               Text(
-                '⭐ मिळवलेले तारे: $stars',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF8A6500),
-                ),
+                finished
+                    ? '🌳'
+                    : water == 2
+                        ? '🌿'
+                        : water == 1
+                            ? '🌱'
+                            : planted
+                                ? '🫘'
+                                : '🪴',
+                style: const TextStyle(fontSize: 100),
               ),
-              const SizedBox(height: 24),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 35),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFBDECB6),
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(
-                    color: const Color(0xFF78C76E),
-                    width: 3,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    const Text('☀️ 🦋 ☁️',
-                        style: TextStyle(fontSize: 30)),
-                    const SizedBox(height: 18),
-                    Text(
-                      plant,
-                      style: const TextStyle(fontSize: 100),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              const SizedBox(height: 16),
+              Text(
+                finished
+                    ? 'शाब्बास! झाड मोठे झाले! ⭐'
+                    : planted
+                        ? 'झाडाला पाणी द्या: $water/3'
+                        : 'आधी मातीत बी पेरा.',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20),
               ),
-              const SizedBox(height: 24),
-              if (stage == 0)
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton.icon(
-                    onPressed: plantSeed,
-                    icon: const Text('🌰'),
-                    label: const Text('बियाणे लावा'),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF238B50),
-                      padding: const EdgeInsets.all(16),
-                    ),
-                  ),
-                )
-              else if (stage < 4)
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton.icon(
-                    onPressed: waterPlant,
-                    icon: const Text('💧'),
-                    label: const Text('झाडाला पाणी द्या'),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF238B50),
-                      padding: const EdgeInsets.all(16),
-                    ),
-                  ),
-                )
-              else
+              const SizedBox(height: 25),
+              if (!planted)
+                ElevatedButton.icon(
+                  onPressed: plantSeed,
+                  icon: const Icon(Icons.grass),
+                  label: const Text('बी पेरा'),
+                ),
+              if (planted && !finished)
+                ElevatedButton.icon(
+                  onPressed: waterPlant,
+                  icon: const Icon(Icons.water_drop),
+                  label: const Text('पाणी द्या 💧'),
+                ),
+              if (finished)
                 const Text(
-                  '🏆 अभिनंदन! तुम्ही झाड वाढवले!',
-                  textAlign: TextAlign.center,
+                  'तुम्हाला १ तारा मिळाला! ⭐',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
+                    color: Colors.green,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF238B50),
                   ),
                 ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: restartGame,
-                icon: const Icon(Icons.refresh),
-                label: const Text('पुन्हा खेळा'),
+              OutlinedButton(
+                onPressed: restart,
+                child: const Text('पुन्हा खेळा'),
               ),
-              const SizedBox(height: 8),
-              Text('दिलेली पाण्याची मात्रा: $water'),
             ],
           ),
         ),
@@ -337,49 +316,194 @@ class _GardenGameState extends State<GardenGame> {
   }
 }
 
-class LearningPage extends StatelessWidget {
-  final String emoji;
-  final String title;
-  final Color color;
+class QuizPage extends StatefulWidget {
+  const QuizPage({super.key});
 
-  const LearningPage({
+  @override
+  State<QuizPage> createState() => _QuizPageState();
+}
+
+class _QuizPageState extends State<QuizPage> {
+  int questionIndex = 0;
+  int score = 0;
+  bool answered = false;
+  String feedback = '';
+
+  final List<Map<String, dynamic>> questions = const [
+    {
+      'question': 'आपला राष्ट्रीय पक्षी कोणता?',
+      'options': ['मोर', 'कावळा', 'चिमणी'],
+      'answer': 0,
+    },
+    {
+      'question': '२ + ३ किती?',
+      'options': ['४', '५', '६'],
+      'answer': 1,
+    },
+    {
+      'question': 'गवताचा रंग कोणता?',
+      'options': ['लाल', 'निळा', 'हिरवा'],
+      'answer': 2,
+    },
+    {
+      'question': 'गाय आपल्याला काय देते?',
+      'options': ['दूध', 'पेट्रोल', 'पाणीपुरी'],
+      'answer': 0,
+    },
+    {
+      'question': 'आठवड्यात किती दिवस असतात?',
+      'options': ['५', '७', '१०'],
+      'answer': 1,
+    },
+  ];
+
+  void chooseAnswer(int index) {
+    if (answered) return;
+
+    setState(() {
+      answered = true;
+      if (index == questions[questionIndex]['answer']) {
+        score++;
+        feedback = 'बरोबर उत्तर! 🎉';
+      } else {
+        feedback = 'चांगला प्रयत्न! पुन्हा शिकूया 😊';
+      }
+    });
+  }
+
+  void nextQuestion() {
+    if (questionIndex < questions.length - 1) {
+      setState(() {
+        questionIndex++;
+        answered = false;
+        feedback = '';
+      });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => QuizResult(
+            score: score,
+            total: questions.length,
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final question = questions[questionIndex];
+    final options = question['options'] as List<String>;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('⭐ प्रश्नमंजुषा')),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'प्रश्न ${questionIndex + 1}/${questions.length}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              question['question'] as String,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ...List.generate(options.length, (index) {
+              return SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ElevatedButton(
+                    onPressed: answered
+                        ? null
+                        : () => chooseAnswer(index),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        options[index],
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 12),
+            Text(
+              feedback,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (answered)
+              ElevatedButton(
+                onPressed: nextQuestion,
+                child: Text(
+                  questionIndex == questions.length - 1
+                      ? 'निकाल पाहा'
+                      : 'पुढचा प्रश्न',
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class QuizResult extends StatelessWidget {
+  final int score;
+  final int total;
+
+  const QuizResult({
     super.key,
-    required this.emoji,
-    required this.title,
-    required this.color,
+    required this.score,
+    required this.total,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: const Text('तुमचा निकाल')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 90)),
-            const SizedBox(height: 20),
-            Text(
-              title,
+            const Text('🏆', style: TextStyle(fontSize: 90)),
+            const Text(
+              'शाब्बास!',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: color,
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'शाब्बास! शिकत राहा! 🌟',
-              style: TextStyle(fontSize: 20),
+            Text(
+              'तुमचे गुण: $score / $total',
+              style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
-            FilledButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('मागे जा'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const HomePage(),
+                  ),
+                  (route) => false,
+                );
+              },
+              child: const Text('मुख्य पानावर जा'),
             ),
           ],
         ),
@@ -388,3 +512,69 @@ class LearningPage extends StatelessWidget {
   }
 }
 
+class StoriesPage extends StatelessWidget {
+  const StoriesPage({super.key});
+
+  final List<Map<String, String>> stories = const [
+    {
+      'title': 'ससा आणि कासव 🐰🐢',
+      'story':
+          'एकदा ससा आणि कासव यांच्यात शर्यत लागली. ससा वेगाने धावला, '
+          'पण मध्ये झोपला. कासव हळूहळू चालत राहिले आणि शर्यत जिंकले. '
+          'बोध: सातत्याने प्रयत्न केले तर यश मिळते.',
+    },
+    {
+      'title': 'तहानलेला कावळा 🐦',
+      'story':
+          'एका कावळ्याला पाणी मिळेना. त्याला एका भांड्यात थोडे पाणी '
+          'दिसले. त्याने त्यात दगड टाकले. पाणी वर आले आणि त्याने पाणी '
+          'प्यायले. बोध: बुद्धीचा वापर करा.',
+    },
+    {
+      'title': 'मुंगी आणि कबूतर 🐜🕊️',
+      'story':
+          'मुंगी पाण्यात पडली. कबुतराने पान टाकून तिची मदत केली. '
+          'नंतर मुंगीनेही कबुतराला संकटातून वाचवले. '
+          'बोध: दुसऱ्यांना मदत करा.',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('📚 छान गोष्टी')),
+      body: ListView(
+        padding: const EdgeInsets.all(12),
+        children: stories.map((story) {
+          return Card(
+            child: ExpansionTile(
+              leading: const Icon(
+                Icons.menu_book,
+                color: Colors.deepPurple,
+              ),
+              title: Text(
+                story['title']!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 19,
+                ),
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    story['story']!,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      height: 1.6,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
