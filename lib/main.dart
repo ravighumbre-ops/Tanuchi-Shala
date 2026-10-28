@@ -1,151 +1,5 @@
 
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const TanuchiShalaApp());
-}
-
-class TanuchiShalaApp extends StatelessWidget {
-  const TanuchiShalaApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'तानुची शाळा',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-        ),
-        scaffoldBackgroundColor: const Color(0xFFFFF8E7),
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final lessons = [
-      ['मराठी अक्षरे', 'अ आ इ ई', Icons.menu_book, Colors.pink, 'letters'],
-      ['अंक शिकूया', '१ २ ३ ४', Icons.looks_one, Colors.blue, 'numbers'],
-      ['रंग ओळखा', '🌈 रंगीत जग', Icons.palette, Colors.orange, 'colors'],
-      ['प्रश्नमंजुषा', 'खेळा आणि तारे मिळवा', Icons.emoji_events, Colors.purple, 'quiz'],
-      ['प्राण्यांची दुनिया', '🐘 🐒 🦁', Icons.pets, Colors.green, 'animals'],
-      ['आकार शिकूया', '○ □ △', Icons.category, Colors.teal, 'shapes'],
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('🎈 तानुची शाळा'),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFFFD66B),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFFFFD6E7),
-                  Color(0xFFD9E8FF),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: const Column(
-              children: [
-                Text(
-                  '🌟 नमस्कार छोट्या दोस्ता! 🌟',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'खेळत खेळत शिकूया आणि चमकूया!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 17),
-                ),
-                SizedBox(height: 12),
-                Text('🧸 📚 🎨 🚀',
-                    style: TextStyle(fontSize: 32)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'आज काय शिकायचे?',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ...lessons.map((lesson) {
-            final title = lesson[0] as String;
-            final subtitle = lesson[1] as String;
-            final icon = lesson[2] as IconData;
-            final color = lesson[3] as Color;
-            final type = lesson[4] as String;
-
-            return Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(12),
-                leading: CircleAvatar(
-                  radius: 27,
-                  backgroundColor: color.withValues(alpha: 0.15),
-                  child: Icon(icon, color: color, size: 30),
-                ),
-                title: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(subtitle),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  if (type == 'quiz') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const QuizPage(),
-                      ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => LessonPage(
-                          title: title,
-                          type: type,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            );
-          }),
-          const Center(child: Text('💖 रोज थोडे शिकूया! 💖')),
-        ],
-      ),
-    );
-  }
-}
-
-class LessonPage extends StatelessWidget {
+class LessonPage extends StatefulWidget {
   final String title;
   final String type;
 
@@ -156,34 +10,113 @@ class LessonPage extends StatelessWidget {
   });
 
   @override
+  State<LessonPage> createState() => _LessonPageState();
+}
+
+class _LessonPageState extends State<LessonPage> {
+  final FlutterTts tts = FlutterTts();
+
+  final List<Map<String, String>> animals = [
+    {'emoji': '🐶', 'name': 'कुत्रा', 'sound': 'भु भु भु'},
+    {'emoji': '🐱', 'name': 'मांजर', 'sound': 'म्याऊ म्याऊ'},
+    {'emoji': '🐮', 'name': 'गाय', 'sound': 'हंबा हंबा'},
+    {'emoji': '🐘', 'name': 'हत्ती', 'sound': 'हत्तीचा आवाज'},
+    {'emoji': '🦁', 'name': 'सिंह', 'sound': 'सिंहाची डरकाळी'},
+    {'emoji': '🐒', 'name': 'माकड', 'sound': 'माकडाचा आवाज'},
+    {'emoji': '🐰', 'name': 'ससा', 'sound': 'सशाचा आवाज'},
+    {'emoji': '🐓', 'name': 'कोंबडा', 'sound': 'कुकडू कू'},
+    {'emoji': '🐑', 'name': 'मेंढी', 'sound': 'में में'},
+    {'emoji': '🦆', 'name': 'बदक', 'sound': 'क्वॅक क्वॅक'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    setupVoice();
+  }
+
+  Future<void> setupVoice() async {
+    await tts.setLanguage('mr-IN');
+    await tts.setSpeechRate(0.38);
+    await tts.setPitch(1.0);
+  }
+
+  Future<void> speak(String text) async {
+    await tts.stop();
+    await tts.speak(text);
+  }
+
+  @override
+  void dispose() {
+    tts.stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<String> items;
 
-    switch (type) {
+    switch (widget.type) {
       case 'letters':
         items = [
-          'अ', 'आ', 'इ', 'ई', 'उ', 'ऊ',
-          'ए', 'ऐ', 'ओ', 'औ', 'क', 'ख', 'ग', 'घ',
-          'च','छ','ज','झ','ट','ठ','ड','ढ','ण',
-          'त','थ','द','ध','न','प','फ','ब','भ','म',
-          'य','र','ल','व','श','ळ','ष','स','ह','क्ष','ज्ञ'
+          'अ आ इ ई उ ऊ ए ऐ ओ औ अं अः',
+          'क का कि की कु कू के कै को कौ कं कः',
+          'ख खा खि खी खु खू खे खै खो खौ खं खः',
+          'ग गा गि गी गु गू गे गै गो गौ गं गः',
+          'घ घा घि घी घु घू घे घै घो घौ घं घः',
+          'ङ ङा ङि ङी ङु ङू ङे ङै ङो ङौ',
+          'च चा चि ची चु चू चे चै चो चौ चं चः',
+          'छ छा छि छी छु छू छे छै छो छौ छं छः',
+          'ज जा जि जी जु जू जे जै जो जौ जं जः',
+          'झ झा झि झी झु झू झे झै झो झौ झं झः',
+          'ञ ञा ञि ञी ञु ञू ञे ञै ञो ञौ',
+          'ट टा टि टी टु टू टे टै टो टौ टं टः',
+          'ठ ठा ठि ठी ठु ठू ठे ठै ठो ठौ ठं ठः',
+          'ड डा डि डी डु डू डे डै डो डौ डं डः',
+          'ढ ढा ढि ढी ढु ढू ढे ढै ढो ढौ ढं ढः',
+          'ण णा णि णी णु णू णे णै णो णौ णं णः',
+          'त ता ति ती तु तू ते तै तो तौ तं तः',
+          'थ था थि थी थु थू थे थै थो थौ थं थः',
+          'द दा दि दी दु दू दे दै दो दौ दं दः',
+          'ध धा धि धी धु धू धे धै धो धौ धं धः',
+          'न ना नि नी नु नू ने नै नो नौ नं नः',
+          'प पा पि पी पु पू पे पै पो पौ पं पः',
+          'फ फा फि फी फु फू फे फै फो फौ फं फः',
+          'ब बा बि बी बु बू बे बै बो बौ बं बः',
+          'भ भा भि भी भु भू भे भै भो भौ भं भः',
+          'म मा मि मी मु मू मे मै मो मौ मं मः',
+          'य या यि यी यु यू ये यै यो यौ यं यः',
+          'र रा रि री रु रू रे रै रो रौ रं रः',
+          'ल ला लि ली लु लू ले लै लो लौ लं लः',
+          'व वा वि वी वु वू वे वै वो वौ वं वः',
+          'श शा शि शी शु शू शे शै शो शौ शं शः',
+          'ष षा षि षी षु षू षे षै षो षौ षं षः',
+          'स सा सि सी सु सू से सै सो सौ सं सः',
+          'ह हा हि ही हु हू हे है हो हौ हं हः',
+          'ळ ळा ळि ळी ळु ळू ळे ळै ळो ळौ ळं ळः',
+          'क्ष क्षा क्षि क्षी क्षु क्षू क्षे क्षै क्षो क्षौ',
+          'त्र त्रा त्रि त्री त्रु त्रू त्रे त्रै त्रो त्रौ',
+          'ज्ञ ज्ञा ज्ञि ज्ञी ज्ञु ज्ञू ज्ञे ज्ञै ज्ञो ज्ञौ',
         ];
         break;
+
       case 'numbers':
-        items = ['१', '२', '३', '४', '५', '६', '७', '८', '९', '१०'];
+        items = ['१','२','३','४','५','६','७','८','९','१०'];
         break;
+
       case 'colors':
         items = [
           '🔴 लाल', '🔵 निळा', '🟡 पिवळा',
           '🟢 हिरवा', '🟣 जांभळा', '🟠 नारिंगी',
         ];
         break;
+
       case 'animals':
-        items = [
-          '🐘 हत्ती', '🦁 सिंह', '🐒 माकड',
-          '🐱 मांजर', '🐶 कुत्रा', '🐰 ससा',
-        ];
+        items = animals.map(
+          (a) => '${a['emoji']} ${a['name']}',
+        ).toList();
         break;
+
       default:
         items = [
           '⚪ वर्तुळ', '🟥 चौकोन',
@@ -193,250 +126,77 @@ class LessonPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         backgroundColor: const Color(0xFFFFD66B),
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         itemCount: items.length,
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 1.25,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 1.15,
         ),
         itemBuilder: (context, index) {
+          final text = items[index];
+
           return Card(
             color: Colors.white,
-            child: Center(
-              child: Text(
-                items[index],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () {
+                if (widget.type == 'animals') {
+                  final animal = animals[index];
+                  speak(
+                    '${animal['name']}. ${animal['sound']}.',
+                  );
+                } else {
+                  speak(text);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          text,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: widget.type == 'letters'
+                                ? 18
+                                : 27,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.volume_up,
+                      color: Colors.deepPurple,
+                      size: 26,
+                    ),
+                    const Text(
+                      'आवाज ऐका',
+                      style: TextStyle(
+                        color: Colors.deepPurple,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
-
-  @override
-  State<QuizPage> createState() => _QuizPageState();
-}
-
-class _QuizPageState extends State<QuizPage> {
-  final List<Map<String, Object>> questions = const [
-    {
-      'question': 'मराठीतील पहिले अक्षर कोणते?',
-      'options': ['अ', 'क', 'म'],
-      'answer': 'अ',
-    },
-    {
-      'question': '२ नंतर कोणता अंक येतो?',
-      'options': ['१', '३', '५'],
-      'answer': '३',
-    },
-    {
-      'question': 'गवताचा रंग कोणता?',
-      'options': ['लाल', 'हिरवा', 'निळा'],
-      'answer': 'हिरवा',
-    },
-    {
-      'question': 'जंगलाचा राजा कोण?',
-      'options': ['सिंह', 'ससा', 'मांजर'],
-      'answer': 'सिंह',
-    },
-    {
-      'question': 'आपल्याला प्रकाश कोण देतो?',
-      'options': ['चंद्र', 'सूर्य', 'ढग'],
-      'answer': 'सूर्य',
-    },
-  ];
-
-  int index = 0;
-  int score = 0;
-  bool answered = false;
-  bool finished = false;
-
-  void chooseAnswer(String option) {
-    if (answered || finished) return;
-
-    final correct = option == questions[index]['answer'];
-
-    setState(() {
-      answered = true;
-      if (correct) score++;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          correct
-              ? '🎉🥳 व्वा! अगदी बरोबर! तू खूप हुशार आहेस! 🏆👏'
-              : '😊 काही हरकत नाही! योग्य उत्तर: ${questions[index]['answer']}',
-        ),
-        backgroundColor:
-            correct ? Colors.green : Colors.deepPurple,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void nextQuestion() {
-    if (index < questions.length - 1) {
-      setState(() {
-        index++;
-        answered = false;
-      });
-    } else {
-      setState(() {
-        finished = true;
-      });
-    }
-  }
-
-  void restartQuiz() {
-    setState(() {
-      index = 0;
-      score = 0;
-      answered = false;
-      finished = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (finished) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('प्रश्नमंजुषा')),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  '🏆🎉 शाब्बास चॅम्पियन! 🎉🏆',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  '${questions.length} पैकी $score प्रश्नांची उत्तरे बरोबर!\n\n'
-                  '🥳 तू खूप छान खेळलास!\n'
-                  '💖 आम्हाला तुझा अभिमान आहे!\n'
-                  '🚀 असाच शिकत राहा!',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: restartQuiz,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('🔄 पुन्हा खेळ'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('🏠 घरी जा'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    final question = questions[index];
-    final options = question['options'] as List<String>;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('🌟 प्रश्नमंजुषा'),
-        backgroundColor: const Color(0xFFFFD66B),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            LinearProgressIndicator(
-              value: (index + 1) / questions.length,
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'प्रश्न ${index + 1} / ${questions.length}   ⭐ गुण: $score',
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE4E9FF),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                question['question'] as String,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ...options.map((option) {
-              final isCorrect = option == question['answer'];
-
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: answered && isCorrect
-                        ? Colors.green
-                        : Colors.white,
-                    foregroundColor: Colors.black87,
-                  ),
-                  onPressed: answered
-                      ? null
-                      : () => chooseAnswer(option),
-                  child: Text(
-                    option,
-                    style: const TextStyle(fontSize: 21),
-                  ),
-                ),
-              );
-            }),
-            const Spacer(),
-            if (answered)
-              ElevatedButton(
-                onPressed: nextQuestion,
-                child: Text(
-                  index == questions.length - 1
-                      ? '🏁 निकाल पाहा'
-                      : '➡️ पुढचा प्रश्न',
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }
